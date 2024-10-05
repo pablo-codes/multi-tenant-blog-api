@@ -11,8 +11,8 @@ Step-by-step instructions to set up the project locally:
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-repo.git
-    cd your-repo
+    git clone https://github.com/pablo-codes/blog-api.git
+    cd blog-api
 
     ```
 
