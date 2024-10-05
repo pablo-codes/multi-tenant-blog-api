@@ -1,0 +1,33 @@
+{
+    "status": "success",
+    "data": [
+        {
+            "id": 4,
+            "blog_id": 2,
+            "content": "Et et sed qui quas rerum. Vel adipisci occaecati perferendis et adipisci accusantium quidem. Tempore et eligendi deleniti laboriosam et culpa explicabo necessitatibus.",
+            "image_url": "https://via.placeholder.com/640x480.png/000022?text=accusantium",
+            "likes_count": 5,
+            "created_at": "2024-10-04T22:24:34.000000Z",
+            "updated_at": "2024-10-04T22:24:34.000000Z",
+            "comments": [
+                {
+                    "id": 16,
+                    "post_id": 4,
+                    "user_id": 47,
+                    "content": "Qui illum iure natus unde est voluptatum aut.",
+                    "created_at": "2024-10-04T22:24:34.000000Z",
+                    "updated_at": "2024-10-04T22:24:34.000000Z"
+                }
+            ],
+            "likes": [
+                {
+                    "id": 31,
+                    "post_id": 4,
+                    "user_id": 52,
+                    "created_at": "2024-10-04T22:24:34.000000Z",
+                    "updated_at": "2024-10-04T22:24:34.000000Z"
+                }
+            ]
+        }
+    ]
+}
