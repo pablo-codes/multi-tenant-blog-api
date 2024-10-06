@@ -28,21 +28,11 @@ Route::middleware(['token'])->get('/test', function (Request $request) {
     return response()->json(['User Id' => $id, 'message' => 'Api connected succesfully'], 200);
 });
 
-Route::middleware('token')->group(function () {
-    Route::get('/blogs', [BlogController::class, 'index']);        // Fetches all blogs with posts 
-    Route::post('/blogs', [BlogController::class, 'create']);      // Create a new blog
-    Route::get('/blogs/{id}', [BlogController::class, 'show']);    // Show a specific blog
-    Route::put('/blogs/{id}', [BlogController::class, 'update']);  // Update a blog
-    Route::delete('/blogs/{id}', [BlogController::class, 'delete']);  // Delete a blog
-});
+
 
 Route::middleware('token')->group(function () {
-    Route::get('/posts/{id}', [PostController::class, 'index']); // Fetches all posts with comments and likes 
-    Route::post('/post/{id}', [PostController::class, 'create']);      // Create a new post
-    Route::get('/post/{id}', [PostController::class, 'show']);    // Show a specific post
-    Route::put('/post/{id}', [PostController::class, 'update']);  // Update a post
-    Route::delete('/post/{id}', [PostController::class, 'delete']);  // Delete a post
-
+    Route::apiResource("blogs", BlogController::class);
+    Route::apiResource("post", PostController::class,);
     Route::post('/comment/{id}', [CommentController::class, 'index']); //Comment on a post
     Route::post('/like/{id}', [LikeController::class, 'index']); // Likes a post
 });

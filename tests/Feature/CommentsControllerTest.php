@@ -20,7 +20,7 @@ class CommentsControllerTest extends TestCase
         parent::setUp();
 
         // Initialize $userToken here
-        $this->userToken = 'Bearer ' . env('TOKEN');
+        $this->userToken = env('TOKEN');
     }
 
     /**

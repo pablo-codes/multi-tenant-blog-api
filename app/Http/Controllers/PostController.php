@@ -12,11 +12,11 @@ class PostController extends Controller
 {
     public function index(Request $request)
     {
-        $id = $request->input('user_id');
+        $id = $request->user_id;
 
         try {
 
-            $post = Post::query()->where('blog_id', $request->id)->get();
+            $post = Post::where('blog_id', $request->blog_id)->get();
 
             Log::channel('custom')->info('Posts fetched', ['user_id' => $id, 'action' => 'fetch_posts', 'ip address' => $request->ip()]);
 
@@ -35,9 +35,9 @@ class PostController extends Controller
     }
 
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
-        $id = $request->input('user_id');
+        $id = $request->user_id;
 
         try {
             $request->validate([
@@ -45,11 +45,12 @@ class PostController extends Controller
                 'image' => 'required|string|max:255'
             ]);
 
-            Post::create([
-                'blog_id' => $request->id,
+            $post = Post::create([
+                'blog_id' => $request->blog_id,
                 'content' => $request->content,
                 'image_url' => $request->image
             ]);
+
 
             Log::channel('custom')->info('Post created', ['user_id' => $id, 'action' => 'create_posts', 'ip address' => $request->ip()]);
 
@@ -68,19 +69,19 @@ class PostController extends Controller
     }
 
 
-    public function show(Request $request)
+    public function show(Request $request, Post $post)
     {
-        $id = $request->input('user_id');
+        $id = $request->user_id;
 
         try {
 
-            $post = Post::query()->with(['comments', 'likes'])->find($request->id);
+            $data = $post->with(['comments', 'likes'])->get();
 
             Log::channel('custom')->info('Post single fetch', ['user_id' => $id, 'action' => 'single_fetch_post', 'ip address' => $request->ip()]);
 
             return response()->json([
                 'status' => 'success',
-                'data' => $post
+                'data' => $data
             ]);
         } catch (Exception $e) {
             Log::channel('custom_error')->error('On Post single fetch', ['user_id' => $id, 'action' => 'single_fetch_post', 'ip address' => $request->ip(), 'error' => $e->getMessage()]);
@@ -93,9 +94,9 @@ class PostController extends Controller
     }
 
 
-    public function update(Request $request)
+    public function update(Request $request, Post $post)
     {
-        $id = $request->input('user_id');
+        $id = $request->user_id;
 
         try {
 
@@ -106,17 +107,18 @@ class PostController extends Controller
 
 
 
-            $post = Post::query()->find($request->id)->update([
+            $post->update([
                 'content' => $request->content,
                 'image_url' => $request->image
             ]);
+            $post->refresh();
 
             Log::channel('custom')->info('Post updated', ['user_id' => $id, 'action' => 'update_post', 'ip address' => $request->ip()]);
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Post updated successfully.',
-                //'data' => $post
+                'data' => $post->get()
             ]);
         } catch (Exception $e) {
             Log::channel('custom_error')->error('On Post update', ['user_id' => $id, 'action' => 'update_post', 'ip address' => $request->ip(), 'error' => $e->getMessage()]);
@@ -129,14 +131,13 @@ class PostController extends Controller
     }
 
 
-    public function delete(Request $request)
+    public function destroy(Request $request, Post $post)
     {
-        $id = $request->input('user_id');
+        $id = $request->user_id;
 
         try {
-            // 
 
-            Post::query()->find($request->id)->delete();
+            $post->delete();
 
             Log::channel('custom')->info('Post deletion', ['user_id' => $id, 'action' => 'delete_post', 'ip address' => $request->ip()]);
 

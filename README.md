@@ -64,4 +64,8 @@ php artisan test
 -   Click on try.
 -   View Documentation to see expected responses for success and error.
 
+## Postman
+
+-   The Json file.
+
 NB:Errors are logged in blog_api_error.log while info in blog_api.log

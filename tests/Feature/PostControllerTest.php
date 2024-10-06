@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\Post;
 use App\Models\Blog;
+use App\Models\Comments;
+use App\Models\Like;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -19,7 +21,7 @@ class PostControllerTest extends TestCase
         parent::setUp();
 
         // Initialize $userToken here
-        $this->userToken = 'Bearer ' . env('TOKEN');
+        $this->userToken = env('TOKEN');
     }
     /**
      * Test fetching all posts for a blog.
@@ -32,7 +34,9 @@ class PostControllerTest extends TestCase
 
         $response = $this->withHeaders([
             'Authorization' => $this->userToken,
-        ])->getJson("api/posts/{$blog->id}");
+        ])->getJson("api/post", [
+            'id' => $blog->id
+        ]);
 
         $response->assertStatus(200)
             ->assertJsonStructure([
@@ -51,12 +55,19 @@ class PostControllerTest extends TestCase
         $user = User::factory()->create(['token' => env('TOKEN')]);
         $blog = Blog::factory()->create(['user_id' => $user->id]);
 
+
+        $cont = fake()->paragraph();
+        $img = fake()->imageUrl();
+
         $response = $this->withHeaders([
             'Authorization' => $this->userToken,
-        ])->postJson("api/post/{$blog->id}", [
-            'content' => 'Test post content',
-            'image' => 'test-image.jpg',
+        ])->postJson("api/post", [
+            'blog_id' => $blog->id,
+            'content' => $cont,
+            'image' => $img
         ]);
+
+
 
         $response->assertStatus(200)
             ->assertJson([
@@ -66,8 +77,8 @@ class PostControllerTest extends TestCase
 
         $this->assertDatabaseHas('posts', [
             'blog_id' => $blog->id,
-            'content' => 'Test post content',
-            'image_url' => 'test-image.jpg',
+            'content' => $cont,
+            'image_url' => $img,
         ]);
     }
 

@@ -11,10 +11,10 @@ class BlogController extends Controller
 {
     public function index(Request $request)
     {
-        $id = $request->input('user_id');
+        $id = $request->user_id;
 
         try {
-            $blogs = Blog::query()->where('user_id', $id)->with(['posts'])->get();
+            $blogs = Blog::with(['posts'])->get();
 
             Log::channel('custom')->info('Blogs fetched', ['user_id' => $id, 'action' => 'fetch_blogs', 'ip address' => $request->ip()]);
 
@@ -33,9 +33,9 @@ class BlogController extends Controller
     }
 
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
-        $id = $request->input('user_id');
+        $id = $request->user_id;
 
         try {
             $request->validate([
@@ -65,13 +65,13 @@ class BlogController extends Controller
     }
 
 
-    public function show(Request $request)
+    public function show(Request $request, Blog $blog)
     {
-        $id = $request->input('user_id');
+        $id = $request->user_id;
 
         try {
 
-            $blog = Blog::query()->where('id', $request->id)->where('user_id', $id)->first();
+
 
             Log::channel('custom')->info('Blog single fetch', ['user_id' => $id, 'action' => 'single_fetch_blog', 'ip address' => $request->ip()]);
 
@@ -90,9 +90,9 @@ class BlogController extends Controller
     }
 
 
-    public function update(Request $request)
+    public function update(Request $request, Blog $blog)
     {
-        $id = $request->input('user_id');
+        $id = $request->user_id;
 
         try {
 
@@ -101,16 +101,17 @@ class BlogController extends Controller
                 'description' => 'required|string',
             ]);
 
-            Blog::query()->where('id', $request->id)->where('user_id', $id)->update([
+            $blog->update([
                 'title' => $request->title,
                 'description' => $request->description
             ]);
-
+            $blog->refresh();
             Log::channel('custom')->info('Blog updated', ['user_id' => $id, 'action' => 'update_blog', 'ip address' => $request->ip()]);
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Blog updated successfully.'
+                'message' => 'Blog updated successfully.',
+                'data' => $blog->get()
             ]);
         } catch (Exception $e) {
             Log::channel('custom_error')->error('On Blog update', ['user_id' => $id, 'action' => 'update_blog', 'ip address' => $request->ip(), 'error' => $e->getMessage()]);
@@ -123,13 +124,13 @@ class BlogController extends Controller
     }
 
 
-    public function delete(Request $request)
+    public function destroy(Request $request, Blog $blog)
     {
-        $id = $request->input('user_id');
+        $id = $request->user_id;
 
         try {
 
-            Blog::query()->where('id', $request->id)->where('user_id', $id)->delete();
+            $blog->delete();
 
             Log::channel('custom')->info('Blog deletion', ['user_id' => $id, 'action' => 'delete_blog', 'ip address' => $request->ip()]);
 

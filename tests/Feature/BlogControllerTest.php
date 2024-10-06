@@ -19,7 +19,7 @@ class BlogControllerTest extends TestCase
         parent::setUp();
 
         // Initialize $userToken here
-        $this->userToken = 'Bearer ' . env('TOKEN');
+        $this->userToken =  env('TOKEN');
     }
 
     /**
@@ -110,7 +110,7 @@ class BlogControllerTest extends TestCase
         ]);
 
         $response->assertStatus(200)
-            ->assertJson([
+            ->assertJsonFragment([
                 'status' => 'success',
                 'message' => 'Blog updated successfully.'
             ]);

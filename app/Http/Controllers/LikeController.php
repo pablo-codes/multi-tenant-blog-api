@@ -16,7 +16,7 @@ class LikeController extends Controller
         try {
 
 
-            Like::query()->updateOrCreate([
+            Like::updateOrCreate([
                 'user_id' => $id,
                 'post_id' => $request->id,
             ], [
