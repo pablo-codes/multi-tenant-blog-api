@@ -15,8 +15,8 @@ class TokenMiddleware
     {
         // Retrieve the token from the request headers
         $token = $request->header('Authorization');
-        Log::channel('custom')->info('Token :' . $token);
-        // Check if the token matches 'vg@123'
+        // Log::channel('custom')->info('Token :' . $token);
+
         if ($token !== env('TOKEN')) {
             // If the token is invalid, return a 403 Forbidden response
             return response()->json(['message' => 'Forbidden'], 403);
