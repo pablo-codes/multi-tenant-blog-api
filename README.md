@@ -1,8 +1,8 @@
-# Blog Api
+# Multi Tenant Blog System
 
-## CRUD Blog Api
+## CRUD Mult Tenant Blog System
 
-A Blog Api created for the Courierplus - Backend Developer Assessment.
+A Multi Tenant Blog System created for the Courierplus - Laravel Backend Developer Assessment.
 
 ## Installation
 
@@ -11,7 +11,7 @@ Step-by-step instructions to set up the project locally:
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/pablo-codes/blog-api.git
+    git clone https://github.com/pablo-codes/multi-tenant-blog-api.git
     cd blog-api
 
     ```
